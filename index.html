@@ -1,20 +1,24 @@
-<!DOCTYPE html>
+<!DOCTYPE html><!DOCTYPE html>
 <html>
   <head>
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+
+    <script src="https://unpkg.com/aframe-orbit-controls-component-2@0.1.12/dist/aframe-orbit-controls-component.min.js"></script>
   </head>
   <body>
 
     <a-scene embedded arjs vr-mode-ui="enabled: false">
         
-        <a-gltf-model src="devreme.glb" position="0 0 0" scale="0.5 0.5 0.5"></a-gltf-model>
+        <a-gltf-model
+          src="devreme.glb"
+          position="-0.5 0 -5"
+          scale="0.25 0.25 0.25"
+        ></a-gltf-model>
 
-        <a-camera fov="60"></a-camera>
+        <a-camera orbit-controls="target: 0 0 -5; enableDamping: true; dampingFactor: 0.25"></a-camera>
 
     </a-scene>
 
   </body>
-
 </html>
-
