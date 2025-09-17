@@ -89,14 +89,15 @@
             <!--
                 3D Model (GLTF formatında)
                 `gltf-model`: .gltf veya .glb uzantılı modeli yükler.
-                `src`: Model dosyasının URL'si. Buraya kendi modelinizin linkini koymalısınız.
+                `src`: Model dosyasının URL'si. Eğer modeli bir sunucuya yüklediyseniz tam URL'yi yazın.
+                       Eğer 'devreme.glb' dosyası bu html dosyasıyla aynı klasördeyse, bu şekilde bırakabilirsiniz.
                 `scale`: Modelin boyutunu ayarlar. (x y z)
                 `position`: Modelin işaretçiye göre konumunu ayarlar. (x y z) - y=0 modeli işaretçinin tam üzerine koyar.
                 `rotation`: Modelin başlangıç dönüşünü ayarlar. (x y z) - Genellikle modelleri dik duruma getirmek için x ekseninde -90 derece döndürmek gerekir.
             -->
             <a-entity
                 id="building-model"
-                gltf-model="url(https://cdn.glitch.global/e8402f0b-5f72-4364-a48f-31586712391b/low_poly_building_01.glb?v=1716382894396)"
+                gltf-model="url(devreme.glb)"
                 scale="0.08 0.08 0.08"
                 position="0 0 0"
                 rotation="-90 0 0">
@@ -126,4 +127,5 @@
     </script>
 </body>
 </html>
+
 
