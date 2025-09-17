@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html><!DOCTYPE html>
 <html>
 <head>
     <title>Mimari AR/VR Sergisi</title>
@@ -67,37 +67,15 @@
     </div>
 
     <!-- A-Frame Sahnesi: Tüm AR/VR nesneleri burada yer alır -->
-    <!-- `arjs` özellikleri:
-        `sourceType: 'webcam'`: Kamera görüntüsünü kullanır.
-        `trackingMethod: 'best'`: En iyi takip yöntemini seçer.
-        `debugUIEnabled: false'`: Hata ayıklama arayüzünü kapatır.
-        `detectionMode: 'mono_and_matrix'`: Siyah-beyaz işaretçileri algılar.
-        `matrixCodeType: '3x3'`
-    -->
-    <!-- DÜZELTME: Telefondaki zoom sorununu çözmek için 'embedded' özelliği kaldırıldı. -->
     <a-scene arjs='sourceType: webcam; trackingMethod: best; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;'>
         
-        <!--
-            HIRO İşaretçisi (Marker)
-            Bu, AR.js'nin tanıyacağı desendir.
-            `type='pattern'`: Desen tabanlı bir işaretçi olduğunu belirtir.
-            `url`: İşaretçinin desen dosyasının yolu. Hiro, AR.js'nin standart işaretçilerindendir.
-            İşaretçi algılandığında, içindeki tüm nesneler görünür hale gelir.
-        -->
+        <!-- HIRO İşaretçisi (Marker) -->
         <a-marker type='pattern' url='https://ar-js-org.github.io/AR.js/data/images/hiro.patt'>
             
-            <!--
-                3D Model (GLTF formatında)
-                `gltf-model`: .gltf veya .glb uzantılı modeli yükler.
-                `src`: Model dosyasının URL'si. Eğer modeli bir sunucuya yüklediyseniz tam URL'yi yazın.
-                       Eğer 'devreme.glb' dosyası bu html dosyasıyla aynı klasördeyse, bu şekilde bırakabilirsiniz.
-                `scale`: Modelin boyutunu ayarlar. (x y z)
-                `position`: Modelin işaretçiye göre konumunu ayarlar. (x y z) - y=0 modeli işaretçinin tam üzerine koyar.
-                `rotation`: Modelin başlangıç dönüşünü ayarlar. (x y z) - Genellikle modelleri dik duruma getirmek için x ekseninde -90 derece döndürmek gerekir.
-            -->
+            <!-- 3D Model (GLTF formatında) -->
             <a-entity
                 id="building-model"
-                gltf-model="url(devreme.glb)"
+                gltf-model="url(https://Mivft.github.io/AR-Sergi/devreme.glb)"
                 scale="0.08 0.08 0.08"
                 position="0 0 0"
                 rotation="-90 0 0">
