@@ -1,42 +1,127 @@
-<!doctype html>
-<html lang="tr">
-  <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <title>AR Sergi — Hiro + devreme.glb</title>
-
-    <!-- A-Frame -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mimari AR/VR Sergisi</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- A-Frame kütüphanesi: Web'de VR ve AR oluşturmak için temel çerçeve -->
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-    <!-- AR.js (A-Frame sürümü, marker tracking) -->
-    <script src="https://cdn.jsdelivr.net/npm/ar.js@3.4.5/aframe/build/aframe-ar.min.js"></script>
-
+    <!-- AR.js kütüphanesi: A-Frame ile Artırılmış Gerçeklik özellikleri ekler -->
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
     <style>
-      html,body {margin:0;overflow:hidden;background:#000}
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Kullanıcıya ne yapacağını anlatan başlangıç ekranı */
+        #loader-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            z-index: 10000;
+            flex-direction: column;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        #loader-overlay h1 {
+            margin: 0;
+        }
+        #loader-overlay p {
+            font-size: 1.1em;
+            max-width: 600px;
+            margin: 15px 0;
+        }
+        #start-button {
+            padding: 12px 25px;
+            font-size: 1.2em;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #start-button:hover {
+            background-color: #0056b3;
+        }
     </style>
-  </head>
-  <body>
-    <a-scene
-      vr-mode-ui="enabled: false"
-      renderer="colorManagement:true; physicallyCorrectLights:true"
-      embedded
-      arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false"
-    >
-      <!-- Işık -->
-      <a-entity light="type: hemisphere; intensity: 1"></a-entity>
+</head>
+<body style='margin : 0px; overflow: hidden;'>
+    <!-- Başlangıç ekranı -->
+    <div id="loader-overlay">
+        <div>
+            <h1>Mimari AR Sergisine Hoş Geldiniz</h1>
+            <p>Başlamak için lütfen kameranıza erişim izni verin. Ardından telefonunuzu masanın üzerindeki Hiro işaretçisine doğrultun.</p>
+            <button id="start-button">Başla</button>
+        </div>
+    </div>
 
-      <!-- Marker: default Hiro -->
-      <a-marker preset="hiro">
-        <!-- 3D Model -->
-        <a-entity
-          gltf-model="./models/devreme.glb"
-          position="0 0 0"
-          rotation="0 0 0"
-          scale="0.025 0.025 0.025"
-        ></a-entity>
-      </a-marker>
+    <!-- A-Frame Sahnesi: Tüm AR/VR nesneleri burada yer alır -->
+    <!-- `arjs` özellikleri:
+        `sourceType: 'webcam'`: Kamera görüntüsünü kullanır.
+        `trackingMethod: 'best'`: En iyi takip yöntemini seçer.
+        `debugUIEnabled: false'`: Hata ayıklama arayüzünü kapatır.
+        `detectionMode: 'mono_and_matrix'`: Siyah-beyaz işaretçileri algılar.
+        `matrixCodeType: '3x3'`
+    -->
+    <a-scene embedded arjs='sourceType: webcam; trackingMethod: best; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;'>
+        
+        <!--
+            HIRO İşaretçisi (Marker)
+            Bu, AR.js'nin tanıyacağı desendir.
+            `type='pattern'`: Desen tabanlı bir işaretçi olduğunu belirtir.
+            `url`: İşaretçinin desen dosyasının yolu. Hiro, AR.js'nin standart işaretçilerindendir.
+            İşaretçi algılandığında, içindeki tüm nesneler görünür hale gelir.
+        -->
+        <a-marker type='pattern' url='https://ar-js-org.github.io/AR.js/data/images/hiro.patt'>
+            
+            <!--
+                3D Model (GLTF formatında)
+                `gltf-model`: .gltf veya .glb uzantılı modeli yükler.
+                `src`: Model dosyasının URL'si. Buraya kendi modelinizin linkini koymalısınız.
+                `scale`: Modelin boyutunu ayarlar. (x y z)
+                `position`: Modelin işaretçiye göre konumunu ayarlar. (x y z) - y=0 modeli işaretçinin tam üzerine koyar.
+                `rotation`: Modelin başlangıç dönüşünü ayarlar. (x y z) - Genellikle modelleri dik duruma getirmek için x ekseninde -90 derece döndürmek gerekir.
+            -->
+            <a-entity
+                id="building-model"
+                gltf-model="url(https://cdn.glitch.global/e8402f0b-5f72-4364-a48f-31586712391b/low_poly_building_01.glb?v=1716382894396)"
+                scale="0.08 0.08 0.08"
+                position="0 0 0"
+                rotation="-90 0 0">
+            </a-entity>
 
-      <!-- Kamera -->
-      <a-entity camera></a-entity>
+        </a-marker>
+
+        <!-- Ortam ışığı: Sahnedeki her şeyi eşit şekilde aydınlatır -->
+        <a-entity light="type: ambient; color: #BBB"></a-entity>
+        
+        <!-- Yönlü ışık: Güneş gibi davranır, gölgeler oluşturur -->
+        <a-entity light="type: directional; color: #FFF; intensity: 0.7" position="-1 1 2"></a-entity>
+
+        <!-- Kamera: Kullanıcının bakış açısı -->
+        <a-entity camera></a-entity>
     </a-scene>
-  </body>
+
+    <script>
+        // Başlatma butonu
+        const startButton = document.getElementById('start-button');
+        const overlay = document.getElementById('loader-overlay');
+
+        startButton.addEventListener('click', () => {
+            // Overlay'i gizle
+            overlay.style.display = 'none';
+        });
+    </script>
+</body>
 </html>
