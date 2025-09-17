@@ -1,23 +1,42 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="tr">
   <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>AR Sergi — Hiro + devreme.glb</title>
+
+    <!-- A-Frame -->
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-    <script src="https://unpkg.com/mind-ar@1.2.0/dist/mind-ar-aframe.js"></script>
+    <!-- AR.js (A-Frame sürümü, marker tracking) -->
+    <script src="https://cdn.jsdelivr.net/npm/ar.js@3.4.5/aframe/build/aframe-ar.min.js"></script>
+
+    <style>
+      html,body {margin:0;overflow:hidden;background:#000}
+    </style>
   </head>
   <body>
+    <a-scene
+      vr-mode-ui="enabled: false"
+      renderer="colorManagement:true; physicallyCorrectLights:true"
+      embedded
+      arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false"
+    >
+      <!-- Işık -->
+      <a-entity light="type: hemisphere; intensity: 1"></a-entity>
 
-    <a-scene mindar-image="imageTarget: target.mind;" embedded vr-mode-ui="enabled: false" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" >
-      
-      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
-
-      <a-entity mindar-image-target="targetIndex: 0">
-        <a-gltf-model
-          src="devreme.glb"
+      <!-- Marker: default Hiro -->
+      <a-marker preset="hiro">
+        <!-- 3D Model -->
+        <a-entity
+          gltf-model="./models/devreme.glb"
           position="0 0 0"
-          scale="0.25 0.25 0.25"
-        ></a-gltf-model>
-      </a-entity>
+          rotation="0 0 0"
+          scale="0.025 0.025 0.025"
+        ></a-entity>
+      </a-marker>
 
+      <!-- Kamera -->
+      <a-entity camera></a-entity>
     </a-scene>
   </body>
 </html>
