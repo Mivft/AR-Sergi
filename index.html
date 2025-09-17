@@ -1,24 +1,44 @@
-<!DOCTYPE html><!DOCTYPE html>
+<!DOCTYPE html>
 <html>
   <head>
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
-
-    <script src="https://unpkg.com/aframe-orbit-controls-component-2@0.1.12/dist/aframe-orbit-controls-component.min.js"></script>
+    
   </head>
   <body>
 
-    <a-scene embedded arjs vr-mode-ui="enabled: false">
+    <a-scene embedded arjs="sourceType: webcam; trackingMethod: hit-test;" vr-mode-ui="enabled: false">
         
         <a-gltf-model
           src="devreme.glb"
-          position="-0.5 0 -5"
+          position="0 0 0"
           scale="0.25 0.25 0.25"
+          visible="false"
+          data-hittest-target
         ></a-gltf-model>
 
-        <a-camera orbit-controls="target: 0 0 -5; enableDamping: true; dampingFactor: 0.25"></a-camera>
+        <a-camera position="0 0 0" wasd-controls="false" look-controls="false"></a-camera>
 
     </a-scene>
 
+    <script>
+      AFRAME.registerComponent('hittest-handler', {
+        init: function() {
+          let scene = this.el;
+          let model = document.querySelector('[data-hittest-target]');
+          
+          scene.addEventListener('ar-hit-test-result', (event) => {
+            if (event.detail.hit) {
+              let hitPosition = event.detail.hit;
+              model.setAttribute('position', `${hitPosition.x} ${hitPosition.y} ${hitPosition.z}`);
+              model.setAttribute('visible', 'true');
+              
+              // Modeli yerleştirdikten sonra olayı dinlemeyi durdur.
+              scene.removeEventListener('ar-hit-test-result', this);
+            }
+          });
+        }
+      });
+    </script>
   </body>
 </html>
