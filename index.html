@@ -2,17 +2,21 @@
 <html>
   <head>
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://unpkg.com/mind-ar@1.2.0/dist/mindar-aframe.js"></script>
   </head>
   <body>
-    <a-scene>
-        
+
+    <a-scene mindar-image="imageTarget: target.mind;" embedded vr-mode-ui="enabled: false" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" >
+      
+      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+      <a-entity mindar-image-target="targetIndex: 0">
         <a-gltf-model
           src="devreme.glb"
-          position="0 0 -5"
+          position="0 0 0"
           scale="0.25 0.25 0.25"
         ></a-gltf-model>
-
-        <a-camera position="0 0 0" look-controls="enabled: true"></a-camera>
+      </a-entity>
 
     </a-scene>
   </body>
