@@ -1,45 +1,61 @@
-<head>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR Mimari Sergi</title>
+    <!-- Tailwind CSS'i yükle -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- A-Frame'i yükle -->
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <!-- AR.js'i yükle -->
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+  </head>
+  <body class="bg-gray-900 text-white font-sans overflow-hidden">
 
-    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <!-- Karşılama Sayfası -->
+    <div id="welcome-page" class="absolute inset-0 flex flex-col items-center justify-center p-4 text-center z-10 bg-gray-900">
+      <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-4">Mimari AR Sergisine Hoş Geldiniz</h1>
+      <p class="text-base sm:text-lg md:text-xl max-w-2xl mb-8">
+        Sergiyi gezmek için lütfen kameranıza erişim izni verin. Ardından telefonunuzu masanın üzerindeki Hiro işaretçisine (marker) doğru tutun.
+      </p>
+      <button 
+        id="startButton" 
+        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transform transition-transform duration-200 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50"
+      >
+        Başla
+      </button>
+    </div>
 
-    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <!-- AR Sahnesi (başlangıçta gizli) -->
+    <div id="ar-scene-container" class="absolute inset-0 hidden">
+      <a-scene embedded arjs="sourceType: webcam; trackingMethod: best; debugUIEnabled: false;" vr-mode-ui="enabled: false">
+          
+          <!-- "hiro" desenine duyarlı bir işaretçi (marker) ekle -->
+          <a-marker preset="hiro">
+              <!-- İşaretçi algılandığında yüklenecek olan 3D modeli (GLTF) tanımla -->
+              <a-gltf-model
+                src="https://raw.githubusercontent.com/Mivrit/AR-Sergi/main/devreme.glb"
+                position="0 0 0"
+                scale="0.5 0.5 0.5"
+                rotation="0 0 0"
+              ></a-gltf-model>
+          </a-marker>
+  
+          <!-- Kamerayı ekle, bu kullanıcı arayüzü olacak -->
+          <a-camera></a-camera>
+      </a-scene>
+    </div>
 
-  </head>
+    <script>
+      document.getElementById('startButton').addEventListener('click', () => {
+        // Hoş geldin sayfasını gizle
+        document.getElementById('welcome-page').style.display = 'none';
+        
+        // AR sahnesini göster
+        const arSceneContainer = document.getElementById('ar-scene-container');
+        arSceneContainer.style.display = 'block';
+      });
+    </script>
 
-  <body>
-
-
-
-    <a-scene embedded arjs="sourceType: webcam; trackingMethod: best; debugUIEnabled: false;" vr-mode-ui="enabled: false">
-
-        
-
-        <a-marker preset="hiro">
-
-            
-
-            <a-gltf-model
-
-              src="devreme.glb"
-
-              position="0 0 0"
-
-              scale="0.25 0.25 0.25"
-
-            ></a-gltf-model>
-
-
-
-        </a-marker>
-
-
-
-        <a-camera></a-camera>
-
-
-
-    </a-scene>
-
-  </body>
-
+  </body>
 </html>
