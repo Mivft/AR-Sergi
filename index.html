@@ -4,11 +4,11 @@
     <title>Mimari AR Sergisi</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <!-- ÇÖZÜM 1: UYUMLU VE STABİL KÜTÜPHANE SÜRÜMLERİ -->
     <!-- A-Frame'in en kararlı sürümlerinden biri olan 1.5.0'a geri dönüldü. -->
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-    
+
     <!-- AR.js'in belirli ve test edilmiş bir sürümü kullanılıyor. -->
     <script src="https://raw.githack.com/AR-js-org/AR.js/3.3.3/aframe/build/aframe-ar.js"></script>
 </head>
@@ -22,29 +22,27 @@
       - arjs parametreleri sadeleştirildi ve en temel ayarlara çekildi.
     -->
     <a-scene
+        embedded
         renderer="colorManagement: true; logarithmicDepthBuffer: true;"
         vr-mode-ui="enabled: false;"
         arjs="sourceType: webcam; trackingMethod: best; debugUIEnabled: false;"
     >
-        
+
         <a-marker preset="hiro">
             <!-- Modelin -->
             <a-entity
-                position="0 10 0"
-                scale="0.09 0.09 0.09"
+                position="0 0 0"
+                scale="0.1 0.1 0.1"
                 rotation="0 -90 0"
-                gltf-model="url(https://mivft.github.io/AR-Sergi/devremelow.glb)"
+                rotation="0 -90 0"
+                gltf-model="url(https://mivft.github.io/AR-Sergi/devremepivot.glb)"
             ></a-entity>
         </a-marker>
 
-         <a-entity camera></a-entity>
-        
+     
+ 
+        <a-entity camera></a-entity>
+
     </a-scene>
 </body>
 </html>
-
-
-
-
-
-
