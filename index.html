@@ -1,26 +1,57 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
   <title>Mimari AR Sergisi</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- A-Frame Kütüphanesi -->
   <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
-  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+  <!-- AR.js Kütüphanesi (Daha stabil bir CDN üzerinden) -->
+  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.0/aframe/build/aframe-ar.min.js"></script>
 </head>
-  <body style="margin: 0px; overflow: hidden;">
-  <a-scene embedded arjs>
-      <a-marker preset="hiro">
-          <a-entity
-              position="0 0 0"
-              scale="0.25 0.25 0.25"
-              rotation="0 -90 0"
-              gltf-model="url(https://mivft.github.io/AR-Sergi/devremepivot.glb)"
-              ></a-entity>
-        </a-marker>
-        <a-entity light="type: ambient; color: #BBB;"></a-entity>
-        <a-entity light="type: directional; color: #FFF; intensity: 0.7" position="-1 1 2"></a-entity>
-      <a-entity camera></a-entity>
-    </a-scene>
+<body style="margin: 0; overflow: hidden;">
+
+  <!--
+    İyileştirmeler:
+    1. AR.js kütüphanesi, geçici bir kaynak olan 'raw.githack.com' yerine,
+       hızlı ve güvenilir bir CDN (İçerik Dağıtım Ağı) olan 'jsDelivr' üzerinden çağrıldı.
+    2. 'a-marker' etiketine modelin titremesini engelleyen ve daha pürüzsüz hareket
+       etmesini sağlayan 'smooth' özellikleri eklendi.
+    3. Modele, marker bulunduğunda ve kaybolduğunda çalışan giriş/çıkış animasyonları eklendi.
+       Bu, daha profesyonel bir kullanıcı deneyimi sunar.
+  -->
+  <a-scene
+    embedded
+    arToolkit="sourceType: webcam; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
+    renderer="logarithmicDepthBuffer: true; colorManagement: true;"
+    vr-mode-ui="enabled: false">
+
+    <a-assets>
+       <!-- Modelinizi <a-assets> içinde önceden yüklemek performansı artırır -->
+       <a-asset-item id="mimari-model" src="https://mivft.github.io/AR-Sergi/devremepivot.glb"></a-asset-item>
+    </a-assets>
+
+    <!-- smooth özellikleri ile daha pürüzsüz takip sağlanır -->
+    <a-marker preset="hiro" smooth="true" smoothCount="5" smoothTolerance=".01" smoothThreshold="2">
+      <a-entity
+        position="0 0 0"
+        scale="0 0 0" <!-- Animasyonun başlangıcı için ölçek sıfırlandı -->
+        rotation="0 -90 0"
+        gltf-model="#mimari-model"
+        <!-- Marker bulunduğunda modelin büyümesini sağlayan animasyon -->
+        animation="property: scale; to: 0.25 0.25 0.25; dur: 1000; easing: easeOutBack; startEvents: markerFound"
+        <!-- Marker kaybolduğunda modelin küçülmesini sağlayan animasyon -->
+        animation__leave="property: scale; to: 0 0 0; dur: 500; easing: easeInCubic; startEvents: markerLost">
+      </a-entity>
+    </a-marker>
+
+    <!-- Sahne ışıklandırması -->
+    <a-entity light="type: ambient; color: #BBB;"></a-entity>
+    <a-entity light="type: directional; color: #FFF; intensity: 0.7" position="-1 1 2"></a-entity>
+
+    <!-- Kamera -->
+    <a-entity camera></a-entity>
+  </a-scene>
 </body>
 </html>
 
