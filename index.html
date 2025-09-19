@@ -1,57 +1,206 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Mimari AR Sergisi</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- A-Frame Kütüphanesi -->
-  <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
-  <!-- AR.js Kütüphanesi (Daha stabil bir CDN üzerinden) -->
-  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.0/aframe/build/aframe-ar.min.js"></script>
+  <title>Mimari AR Sergisi</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- A-Frame Kütüphanesi -->
+  <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+  <!-- AR.js Kütüphanesi (Daha stabil bir CDN üzerinden) -->
+  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.0/aframe/build/aframe-ar.min.js"></script>
+
+  <style>
+    /* Başlangıç ekranı için stil */
+    #intro-screen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #1a1a1a;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      z-index: 10;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      transition: opacity 0.5s ease-out;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    #intro-screen h1 {
+      font-size: 2.5em;
+      margin-bottom: 0.2em;
+      font-weight: 500;
+    }
+    #intro-screen h2 {
+      font-size: 1.5em;
+      margin-bottom: 1em;
+      font-weight: 300;
+      color: #ccc;
+    }
+    #intro-screen p {
+      font-size: 1.2em;
+      max-width: 80%;
+      margin-bottom: 2.5em;
+      color: #ddd;
+    }
+    #start-button {
+      font-size: 1.2em;
+      padding: 15px 40px;
+      border-radius: 50px;
+      border: 2px solid white;
+      background-color: transparent;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    #start-button:hover {
+      background-color: white;
+      color: #1a1a1a;
+    }
+    .instructions-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    .instruction-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      max-width: 250px;
+    }
+    .instruction-item img {
+      width: 100%;
+      max-width: 200px;
+      height: auto;
+      margin-bottom: 10px;
+      border-radius: 10px;
+    }
+    .instruction-item p {
+      font-size: 1em;
+      max-width: 100%;
+      margin-bottom: 0;
+    }
+    /* Yatay hizalama için mobil uyumlu stil */
+    @media (min-width: 768px) {
+      .instructions-container {
+        flex-direction: row;
+        justify-content: center;
+        gap: 50px;
+      }
+    }
+  </style>
 </head>
 <body style="margin: 0; overflow: hidden;">
 
-  <!--
-    İyileştirmeler:
-    1. AR.js kütüphanesi, geçici bir kaynak olan 'raw.githack.com' yerine,
-       hızlı ve güvenilir bir CDN (İçerik Dağıtım Ağı) olan 'jsDelivr' üzerinden çağrıldı.
-    2. 'a-marker' etiketine modelin titremesini engelleyen ve daha pürüzsüz hareket
-       etmesini sağlayan 'smooth' özellikleri eklendi.
-    3. Modele, marker bulunduğunda ve kaybolduğunda çalışan giriş/çıkış animasyonları eklendi.
-       Bu, daha profesyonel bir kullanıcı deneyimi sunar.
-  -->
-  <a-scene
-    embedded
-    arToolkit="sourceType: webcam; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
-    renderer="logarithmicDepthBuffer: true; colorManagement: true;"
-    vr-mode-ui="enabled: false">
+  <!-- Kullanıcıyı bilgilendirme ve başlatma ekranı -->
+  <div id="intro-screen">
+    <h1>ARCHING AR SERGİ</h1>
+    <h2>DEMO</h2>
+    <p>Artırılmış gerçeklik deneyimine başlamadan önce, lütfen telefonunuzun kamerasını aşağıdaki gibi Hiro işaretçisine doğrultun.</p>
+    <div class="instructions-container">
+      <div class="instruction-item">
+        <img src="https://mivft.github.io/AR-Sergi/Gemini_Generated_Image_iw7rd8iw7rd8iw7r.png" alt="Kamera izni">
+        <p>Uygulamaya kamera izni verdiğinizden emin olun.</p>
+      </div>
+      <div class="instruction-item">
+        <img src="https://mivft.github.io/AR-Sergi/Gemini_Generated_Image_e2z2pqe2z2pqe2z2.png" alt="Hiro işaretçisi kullanımı">
+        <p>Telefonunuzu Hiro işaretçisine doğru tuttuğunuzda model belirecektir.</p>
+      </div>
+    </div>
+    <button id="start-button">BAŞLA</button>
+  </div>
 
-    <a-assets>
-       <!-- Modelinizi <a-assets> içinde önceden yüklemek performansı artırır -->
-       <a-asset-item id="mimari-model" src="https://mivft.github.io/AR-Sergi/devremepivot.glb"></a-asset-item>
-    </a-assets>
+  <!--
+    İyileştirmeler:
+    1. AR.js kütüphanesi, geçici bir kaynak olan 'raw.githack.com' yerine,
+       hızlı ve güvenilir bir CDN (İçerik Dağıtım Ağı) olan 'jsDelivr' üzerinden çağrıldı.
+    2. 'a-marker' etiketine modelin titremesini engelleyen ve daha pürüzsüz hareket
+       etmesini sağlayan 'smooth' özellikleri eklendi.
+    3. Modele, marker bulunduğunda ve kaybolduğunda çalışan giriş/çıkış animasyonları eklendi.
+       Bu, daha profesyonel bir kullanıcı deneyimi sunar.
+  -->
+  <a-scene
+    embedded
+    arToolkit="sourceType: webcam; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
+    renderer="logarithmicDepthBuffer: true; colorManagement: true;"
+    vr-mode-ui="enabled: false">
 
-    <!-- smooth özellikleri ile daha pürüzsüz takip sağlanır -->
-    <a-marker preset="hiro" smooth="true" smoothCount="5" smoothTolerance=".01" smoothThreshold="2">
-      <a-entity
-        position="0 0 0"
-        scale="0 0 0" <!-- Animasyonun başlangıcı için ölçek sıfırlandı -->
-        rotation="0 -90 0"
-        gltf-model="#mimari-model"
-        <!-- Marker bulunduğunda modelin büyümesini sağlayan animasyon -->
-        animation="property: scale; to: 0.25 0.25 0.25; dur: 1000; easing: easeOutBack; startEvents: markerFound"
-        <!-- Marker kaybolduğunda modelin küçülmesini sağlayan animasyon -->
-        animation__leave="property: scale; to: 0 0 0; dur: 500; easing: easeInCubic; startEvents: markerLost">
-      </a-entity>
-    </a-marker>
+    <a-assets>
+       <!-- Modelinizi <a-assets> içinde önceden yüklemek performansı artırır -->
+       <a-asset-item id="mimari-model" src="https://mivft.github.io/AR-Sergi/devremepivot.glb"></a-asset-item>
 
-    <!-- Sahne ışıklandırması -->
-    <a-entity light="type: ambient; color: #BBB;"></a-entity>
-    <a-entity light="type: directional; color: #FFF; intensity: 0.7" position="-1 1 2"></a-entity>
+       <!-- Görseller A-Frame varlığı olarak hala gerekli, çünkü sahne içinde kullanılıyorlar -->
+       <img id="image-1" src="https://mivft.github.io/AR-Sergi/Gemini_Generated_Image_e2z2pqe2z2pqe2z2.png">
+       <img id="image-2" src="https://mivft.github.io/AR-Sergi/Gemini_Generated_Image_iw7rd8iw7rd8iw7r.png">
+    </a-assets>
 
-    <!-- Kamera -->
-    <a-entity camera></a-entity>
-  </a-scene>
+    <!-- smooth özellikleri ile daha pürüzsüz takip sağlanır -->
+    <a-marker preset="hiro" smooth="true" smoothCount="5" smoothTolerance=".01" smoothThreshold="2">
+      <a-entity
+        position="0 0 0"
+        scale="0 0 0" <!-- Animasyonun başlangıcı için ölçek sıfırlandı -->
+        rotation="0 -90 0"
+        gltf-model="#mimari-model"
+        <!-- Marker bulunduğunda modelin büyümesini sağlayan animasyon -->
+        animation="property: scale; to: 0.25 0.25 0.25; dur: 1000; easing: easeOutBack; startEvents: markerFound"
+        <!-- Marker kaybolduğunda modelin küçülmesini sağlayan animasyon -->
+        animation__leave="property: scale; to: 0 0 0; dur: 500; easing: easeInCubic; startEvents: markerLost">
+      </a-entity>
+      <!-- Birinci görsel için A-Frame varlığı -->
+      <a-image
+        src="#image-1"
+        position="-1.5 0.5 -1.5"
+        scale="0 0 0"
+        rotation="0 0 0"
+        width="1"
+        height="1"
+        animation="property: scale; to: 1 1 1; dur: 1000; easing: easeOutBack; startEvents: markerFound"
+        animation__leave="property: scale; to: 0 0 0; dur: 500; easing: easeInCubic; startEvents: markerLost">
+      </a-image>
+
+      <!-- İkinci görsel için A-Frame varlığı -->
+      <a-image
+        src="#image-2"
+        position="1.5 0.5 -1.5"
+        scale="0 0 0"
+        rotation="0 0 0"
+        width="1"
+        height="1"
+        animation="property: scale; to: 1 1 1; dur: 1000; easing: easeOutBack; startEvents: markerFound"
+        animation__leave="property: scale; to: 0 0 0; dur: 500; easing: easeInCubic; startEvents: markerLost">
+      </a-image>
+    </a-marker>
+
+    <!-- Sahne ışıklandırması -->
+    <a-entity light="type: ambient; color: #BBB;"></a-entity>
+    <a-entity light="type: directional; color: #FFF; intensity: 0.7" position="-1 1 2"></a-entity>
+
+    <!-- Kamera -->
+    <a-entity camera></a-entity>
+  </a-scene>
+
+  <script>
+    // Başlatma butonu ve intro ekranını seç
+    const startButton = document.getElementById('start-button');
+    const introScreen = document.getElementById('intro-screen');
+
+    // Butona tıklandığında intro ekranını gizle
+    startButton.addEventListener('click', () => {
+      // Ekranın yavaşça kaybolması için opaklığını değiştiriyoruz
+      introScreen.style.opacity = '0';
+      // Animasyon bittikten sonra ekranı tamamen kaldır
+      setTimeout(() => {
+        introScreen.style.display = 'none';
+      }, 500);
+    });
+  </script>
+
 </body>
 </html>
-
